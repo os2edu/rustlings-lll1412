@@ -5,8 +5,6 @@
 // It can enclose and provide immutable access to borrowed data, and clone the data lazily when mutation or ownership is required.
 // The type is designed to work with general borrowed data via the Borrow trait.
 
-// I AM NOT DONE
-
 use std::borrow::Cow;
 
 fn abs_all<'a, 'b>(input: &'a mut Cow<'b, [i32]>) -> &'a mut Cow<'b, [i32]> {
@@ -23,7 +21,7 @@ fn abs_all<'a, 'b>(input: &'a mut Cow<'b, [i32]>) -> &'a mut Cow<'b, [i32]> {
 fn main() {
     // No clone occurs because `input` doesn't need to be mutated.
     let slice = [0, 1, 2];
-    let mut input = Cow::from(&slice[..]);
+    let mut input = Cow::from(slice.as_slice());
     match abs_all(&mut input) {
         Cow::Borrowed(_) => println!("I borrowed the slice!"),
         _ => panic!("expected borrowed value"),
@@ -42,7 +40,7 @@ fn main() {
     let mut input = Cow::from(slice);
     match abs_all(&mut input) {
         // TODO
-        Cow::Borrowed(_) => println!("I own this slice!"),
+        Cow::Owned(_) => println!("I own this slice!"),
         _ => panic!("expected borrowed value"),
     }
 }
